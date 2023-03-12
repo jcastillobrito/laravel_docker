@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: my_app:latest
+    container_name: my_app
+    depends_on:
+      - db
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=my_app
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - REDIS_HOST=redis
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=base64:9/3xX7VGGhIfT+J6gXB9uN6Wse+BRP4jP53wmcwUZOQ=
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 8080:80
+    restart: always
+
+  db:
+    image: mysql:5.7
+    container_name: my_app_db
+    environment:
+      - MYSQL_DATABASE=my_app
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    restart: always
+
+
+  nginx:
+    image: nginx:latest
+    container_name: my_app_nginx
+    depends_on:
+      - app
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./src:/var/www/html
+    restart: always
