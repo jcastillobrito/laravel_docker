@@ -11,11 +11,11 @@ services:
       - db
     environment:
       - DB_CONNECTION=mysql
-      - DB_HOST=db
+      - DB_HOST=${DB_HOST}
       - DB_PORT=3306
-      - DB_DATABASE=my_app
-      - DB_USERNAME=root
-      - DB_PASSWORD=root
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
       - REDIS_HOST=redis
       - APP_ENV=local
       - APP_DEBUG=true
@@ -32,7 +32,7 @@ services:
     image: mysql:5.7
     container_name: my_app_db
     environment:
-      - MYSQL_DATABASE=my_app
+      - MYSQL_DATABASE=${DB_DATABASE}
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - ./data:/var/lib/mysql
