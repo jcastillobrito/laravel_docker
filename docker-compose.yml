@@ -52,3 +52,17 @@ services:
       - ./nginx.conf:/etc/nginx/nginx.conf
       - ./src:/var/www/html
     restart: always
+    
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: my_app_phpmyadmin
+    links:
+      - db
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+    ports:
+      - 8888:80
+    restart: always
